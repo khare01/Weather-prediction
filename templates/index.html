@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Weather Forecast</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        h1 {
+            font-size: 24px;
+        }
+        form {
+            margin: 20px 0;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        button {
+            padding: 5px 10px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .weather-data {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather Forecast</h1>
+        <form method="post">
+            <label for="city">Enter City:</label>
+            <input type="text" id="city" name="city" required>
+            <button type="submit">Get Forecast</button>
+        </form>
+        {% if city %}
+        <div class="weather-data">
+            <h2>Weather Forecast for {{ city }}</h2>
+            {% if weather_report %}
+            <h3>Today's Weather</h3>
+            <p>Temperature: {{ weather_report.today.0 }}°C<br>
+               Condition: {{ weather_report.today.1 }}</p>
+            <h3>Predicted Tomorrow's Temperature</h3>
+            <p>Temperature: {{ weather_report.predicted_temperature }}°C</p>
+            <h3>Last 3 Days Historical Data</h3>
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th>Temperature (°C)</th>
+                    <th>Condition</th>
+                </tr>
+                {% for day_data in weather_report.historical_data %}
+                <tr>
+                    <td>{{ day_data.last_updated }}</td>
+                    <td>{{ day_data.temperature_celsius }}</td>
+                    <td>{{ day_data.condition_text }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+            <p>No weather data available for {{ city }}.</p>
+            {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
